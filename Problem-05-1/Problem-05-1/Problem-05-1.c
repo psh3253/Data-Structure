@@ -4,12 +4,15 @@
 #include "CLinkedList.h"
 #include "Employee.h"
 
+Employee* WhoIsDuty(List* plist, char* name, int day);
+void ShowEmployee(Employee* emp);
+
 int main(void)
 {
 	List list;
 	ListInit(&list);
 	Employee* emp;
-	
+
 	emp = (Employee*)malloc(sizeof(Employee));
 	emp->empNum = 1;
 	strcpy(emp->name, "노무현");
@@ -30,36 +33,46 @@ int main(void)
 	strcpy(emp->name, "문재인");
 	LInsert(&list, emp);
 
-	emp = WhoIsDuty(&list, "노무현", 2);
-	printf("사번: %d\n", emp->empNum);
-	printf("이름: %s\n", emp->name);
+	emp = WhoIsDuty(&list, "박근혜", 5);
+	ShowEmployee(emp);
 }
 
-Employee* WhoIsDuty(List* list, char* name, int day)
+Employee* WhoIsDuty(List* plist, char* name, int day)
 {
-	Employee *data;
+	Employee* data;
 	int i;
 
-	if (LFirst(list, &data))
+	LFirst(plist, &data);
+	if (strcmp(data->name, name) == 0)
 	{
+		for (i = 0; i < day; i++)
+		{
+			LNext(plist, &data);
+		}
+		return data;
+	}
+	for (i = 0; i < LCount(plist) - 1; i++)
+	{
+		LNext(plist, &data);
 		if (strcmp(data->name, name) == 0)
 		{
 			for (i = 0; i < day; i++)
 			{
-				LNext(list, &data);
+				LNext(plist, &data);
 			}
 			return data;
 		}
-		while (LNext(list, &data))
-		{
-			if (strcmp(data->name, name) == 0)
-			{
-				for (i = 0; i < day; i++)
-				{
-					LNext(list, &data);
-				}
-				return data;
-			}
-		}
 	}
+	return NULL;
+}
+
+void ShowEmployee(Employee* emp)
+{
+	if (emp == NULL)
+	{
+		printf("해당 사원이 존재하지 않습니다.\n");
+		return;
+	}
+	printf("사번: %d\n", emp->empNum);
+	printf("이름: %s\n", emp->name);
 }

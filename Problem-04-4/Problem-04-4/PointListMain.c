@@ -3,6 +3,23 @@
 #include "DLinkedList.h"
 #include "Point.h"
 
+int WhoIsPrecede(Point* pos1, Point* pos2)
+{
+	if (pos1->xpos < pos2->xpos)
+	{
+		return 0;
+	}
+	else if (pos1->xpos == pos2->xpos)
+	{
+		if (pos1->ypos < pos2->ypos)
+			return 0;
+		else
+			return 1;
+	}
+	else
+		return 1;
+}
+
 int main(void)
 {
 	List list;
@@ -10,6 +27,8 @@ int main(void)
 	Point* ppos;
 
 	ListInit(&list);
+
+	SetSortRule(&list, WhoIsPrecede);
 
 	// 4개의 데이터 저장 ///////
 	ppos = (Point*)malloc(sizeof(Point));
