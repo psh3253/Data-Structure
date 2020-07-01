@@ -10,6 +10,7 @@ void ShowEmployee(Employee* emp);
 int main(void)
 {
 	List list;
+	int i;
 	ListInit(&list);
 	Employee* emp;
 
@@ -35,6 +36,17 @@ int main(void)
 
 	emp = WhoIsDuty(&list, "¹Ú±ÙÇý", 5);
 	ShowEmployee(emp);
+
+	if (LFirst(&list, &emp))
+	{
+		free(emp);
+		for (i = 0; i < LCount(&list) - 1; i++)
+		{
+			if (LNext(&list, &emp))
+				free(emp);
+		}
+	}
+	return 0;
 }
 
 Employee* WhoIsDuty(List* plist, char* name, int day)
