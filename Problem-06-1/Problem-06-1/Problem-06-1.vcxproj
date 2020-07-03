@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{C45891EE-7660-4F30-8AAC-D1D09B314648}</ProjectGuid>
+    <ProjectGuid>{C79E351F-CBB1-47D6-AABF-EF28C8D69004}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>ArrayBaseStack</RootNamespace>
+    <RootNamespace>Problem061</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -143,11 +143,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ArrayBaseStack.h" />
+    <ClCompile Include="CLInkedList.c" />
+    <ClCompile Include="CListBaseStack.c" />
+    <ClCompile Include="Problem-06-1.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ArrayBaseStack.c" />
-    <ClCompile Include="ArrayBaseStackMain.c" />
+    <ClInclude Include="CLinkedList.h" />
+    <ClInclude Include="CListBaseStack.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

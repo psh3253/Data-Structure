@@ -1,9 +1,9 @@
 #ifndef __AB_STACK_H__
 #define __AB_STACK_H__
 
-#define TRUE	1;
-#define FALSE	0;
-#define STACK_LEN	100;
+#define TRUE	1
+#define FALSE	0
+#define STACK_LEN	100
 
 typedef int Data;
 
