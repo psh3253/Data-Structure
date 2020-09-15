@@ -1,13 +1,14 @@
 #include <stdio.h>
+#include <time.h>
 #define SWAP(x, y, t)	((t) = (x), (x) = (y), (y) = (t))
 
-void perm(char* list, int i, int n)
+void perm(int* list, int i, int n)
 {
 	int j, temp;
 	if (i == n)
 	{
 		for (j = 0; j <= n; j++)
-			printf("%c", list[j]);
+			printf("%d", list[j]);
 		printf("	");
 	}
 	else
@@ -24,13 +25,17 @@ void perm(char* list, int i, int n)
 int main(void)
 {
 	int num, i;
-	char list[100000];
+	int list[100];
+	double duration;
+	clock_t start;
 	scanf("%d", &num);
 	for (i = 0; i < num + 1; i++)
 	{
-		list[i] = (char)(i + 49);
+		list[i] = i + 1;
 	}
-	//char list[3] = { 'a', 'b', 'c' };
+	start = clock();
 	perm(list, 0, num - 1);
+	duration = ((double)(clock() - start) / CLOCKS_PER_SEC);
+	printf("\n%f", duration);
 	return 0;
 }
