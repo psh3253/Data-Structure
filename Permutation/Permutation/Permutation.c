@@ -23,7 +23,17 @@ void perm(char* list, int i, int n)
 
 int main(void)
 {
-	char list[3] = { 'a', 'b', 'c' };
-	perm(list, 0, 2);
+	int i, j;
+	char A[4][6] = { "GO", "BOY", "GIRL", "GIRLS" };
+	for (i = 0; i < 4; i++)
+	{
+		j = 0;
+		while (A[i][j] != '\0')
+		{
+			j++;
+		}
+		perm(A[i], 0, j - 1);
+		printf("\n");
+	}
 	return 0;
 }
