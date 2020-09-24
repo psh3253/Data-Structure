@@ -6,7 +6,9 @@ typedef struct
 	float coef;
 	int expon;
 } polynomial;
-polynomial* A, * B, * C;
+polynomial* padd(polynomial*, polynomial*);
+polynomial* pmul(polynomial*, polynomial*);
+polynomial* single_mul(polynomial, polynomial*);
 int startA, countA, startB, countB, countD;
 
 polynomial* padd(polynomial* A, polynomial* B)
@@ -17,15 +19,14 @@ polynomial* padd(polynomial* A, polynomial* B)
 	startA = 0;
 	startB = 0;
 	countD = 0;
-
-	while (startA < countA && startB < countB)
+	while (countA * countB > limit)
 	{
-		if (countD >= limit)
-		{
-			limit *= 2;
-			C = (polynomial*)realloc(C, sizeof(polynomial) * limit);
-			D = (polynomial*)realloc(D, sizeof(polynomial) * limit);
-		}
+		limit *= 2;
+		D = realloc(D, sizeof(polynomial) * limit);
+	}
+
+	while (A[startA].expon != -1 && B[startB].expon != -1)
+	{
 		switch (COMPARE(A[startA].expon, B[startB].expon))
 		{
 		case -1:
@@ -49,30 +50,68 @@ polynomial* padd(polynomial* A, polynomial* B)
 			startA++;
 		}
 	}
-	for (; startA < countA; startA++)
+	for (; A[startA].expon != -1; startA++)
 	{
-		if (countD >= limit)
-		{
-			limit *= 2;
-			C = (polynomial*)realloc(C, sizeof(polynomial) * limit);
-			D = (polynomial*)realloc(D, sizeof(polynomial) * limit);
-		}
 		D[countD].coef = A[startA].coef;
 		D[countD++].expon = A[startA].expon;
 	}
 
-	for (; startB < countB; startB++)
+	for (; B[startB].expon != -1; startB++)
 	{
-		if (countD >= limit)
-		{
-			limit *= 2;
-			C = (polynomial*)realloc(C, sizeof(polynomial) * limit);
-			D = (polynomial*)realloc(D, sizeof(polynomial) * limit);
-		}
 		D[countD].coef = B[startB].coef;
 		D[countD++].expon = B[startB].expon;
 	}
+	D[countD].coef = -1;
+	D[countD].expon = -1;
 	return D;
+}
+
+polynomial* pmul(polynomial* A, polynomial* B)
+{
+	int i, limit = 10;
+	polynomial* X;
+	polynomial* D = (polynomial*)malloc(sizeof(polynomial) * 10);
+	while (countA * countB >= limit)
+	{
+		limit *= 2;
+		D = realloc(D, sizeof(polynomial) * limit);
+	}
+	D[0].coef = -1;
+	D[0].expon = -1;
+	for (i = 0; A[i].expon != -1; i++)
+	{
+		X = (polynomial*)malloc(sizeof(polynomial) * 10);
+		limit = 10;
+		while (countB >= limit)
+		{
+			limit *= 2;
+			X = realloc(X, sizeof(polynomial) * limit);
+		}
+		X = single_mul(A[i], B);
+		D = padd(D, X);
+		free(X);
+	}
+	return D;
+}
+
+polynomial* single_mul(polynomial A, polynomial* B)
+{
+	int i, limit = 10;
+	polynomial* X = (polynomial*)malloc(sizeof(polynomial) * 10);
+	while (countB >= limit)
+	{
+		limit *= 2;
+		X = realloc(X, sizeof(polynomial) * limit);
+	}
+
+	for (i = 0; B[i].expon != -1; i++)
+	{
+		X[i].coef = A.coef * B[i].coef;
+		X[i].expon = A.expon + B[i].expon;
+	}
+	X[i].coef = -1;
+	X[i].expon = -1;
+	return X;
 }
 
 int main(void) {
@@ -81,9 +120,10 @@ int main(void) {
 	countA = 0;
 	limit = 10;
 
-	A = (polynomial*)malloc(sizeof(polynomial) * 10);
-	B = (polynomial*)malloc(sizeof(polynomial) * 10);
-	C = (polynomial*)malloc(sizeof(polynomial) * 10);
+	polynomial* A = (polynomial*)malloc(sizeof(polynomial) * 10);
+	polynomial* B = (polynomial*)malloc(sizeof(polynomial) * 10);
+	polynomial* C = (polynomial*)malloc(sizeof(polynomial) * 10);
+	polynomial* D = (polynomial*)malloc(sizeof(polynomial) * 10);
 
 	while (1)
 	{
@@ -91,6 +131,9 @@ int main(void) {
 		scanf("%f %d", &coef, &expon);
 		if (expon == -1)
 		{
+			A[countA].coef = -1;
+			A[countA].expon = -1;
+			countA++;
 			printf("\n");
 			break;
 		}
@@ -113,6 +156,9 @@ int main(void) {
 		if (expon == -1)
 		{
 			printf("\n");
+			B[countB].coef = -1;
+			B[countB].expon = -1;
+			countB++;
 			break;
 		}
 		if (countB >= limit)
@@ -124,10 +170,43 @@ int main(void) {
 		B[countB].expon = expon;
 		countB++;
 	}
-	C = padd(A, B);
-	for (i = 0; i < countD; i++)
+
+	limit = 10;
+	while (countA + countB >= limit)
 	{
+		limit *= 2;
+		C = realloc(C, sizeof(polynomial) * limit);
+	}
+
+	C = padd(A, B);
+	expon = 0;
+	i = 0;
+	printf("´ÙÇ×½ÄÀÇ µ¡¼À\n");
+	while (1)
+	{
+		if (C[i].expon == -1)
+			break;
 		printf("°è¼ö : %f, Áö¼ö : %d\n", C[i].coef, C[i].expon);
+		i++;
+	}
+	printf("\n");
+
+	limit = 10;
+	while (countA * countB >= limit)
+	{
+		limit *= 2;
+		D = realloc(C, sizeof(polynomial) * limit);
+	}
+	D = pmul(A, B);
+	expon = 0;
+	i = 0;
+	printf("´ÙÇ×½ÄÀÇ °ö¼À\n");
+	while (1)
+	{
+		if (D[i].expon == -1)
+			break;
+		printf("°è¼ö : %f, Áö¼ö : %d\n", D[i].coef, D[i].expon);
+		i++;
 	}
 	return 0;
 }
