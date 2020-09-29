@@ -1,10 +1,6 @@
 #include <stdio.h>
-#define MAX_QUEUE_SIZE	100
-typedef struct
-{
-	int key;
-} element;
-element queue[MAX_QUEUE_SIZE];
+#define MAX_QUEUE_SIZE	10
+int queue[MAX_QUEUE_SIZE];
 int rear = -1;
 int front = -1;
 
@@ -22,14 +18,14 @@ int isFullQ()
 	return 0;
 }
 
-void addQ(element item)
+void addQ(int item)
 {
 	if (isFullQ)
 		return;
 	queue[++rear] = item;
 }
 
-element deleteQ()
+int deleteQ()
 {
 	if (isEmptyQ)
 		return;
