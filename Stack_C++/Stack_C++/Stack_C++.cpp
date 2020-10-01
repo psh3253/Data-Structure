@@ -1,52 +1,71 @@
 #include <iostream>
-#include <queue>
-#define MAX_STACK_SIZE    100
 using namespace std;
+template<typename T>
 
 class Stack
 {
 private:
-    int element[MAX_STACK_SIZE];
+    int max_stack_size;
     int top = -1;
+    T* element;
 public:
+    Stack<T>(int size)
+    {
+        element = new T[size];
+        max_stack_size = size;
+    }
+    int isFull()
+    {
+        if (top >= max_stack_size - 1)
+            return 1;
+        else
+            return 0;
+    }
+
     int isEmpty()
     {
         if (top < 0)
             return 1;
-        return 0;
+        else
+            return 0;
     }
-
-    int isFull()
+    void stackFull()
     {
-        if (top >= MAX_STACK_SIZE - 1)
-            return 1;
-        return 0;
+        int i;
+        T* temp = new T[max_stack_size];
+        for (i = 0; i < max_stack_size; i++)
+        {
+            temp[i] = element[i];
+        }
+        delete[] element;
+        max_stack_size *= 2;
+        element = new T[max_stack_size];
+        for (i = 0; i < max_stack_size / 2; i++)
+        {
+            element[i] = temp[i];
+        }
+        delete[] temp;
     }
 
-    void push(int item)
+    void push(T item)
     {
         if (isFull())
             return;
         element[++top] = item;
     }
 
-    int pop()
+    T pop()
     {
         if (isEmpty())
             return -1;
-        return element[top--];
-    }
-    int peek()
-    {
-        if (isEmpty())
-            return -1;
-        return element[top];
+        else
+            return element[top--];
     }
 };
 
-int main()
+int main(void)
 {
-    Stack* s = new Stack();
+    Stack<int>* s = new Stack<int>(10);
     s->push(10);
     s->push(20);
     s->push(30);
@@ -55,4 +74,6 @@ int main()
     s->push(40);
     cout << s->pop() << endl;
     cout << s->pop() << endl;
+    delete[] s;
+    return 0;
 }

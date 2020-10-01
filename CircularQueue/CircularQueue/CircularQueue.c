@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 int max_queue_size = 10;
-int rear = -1;
-int front = -1;
+int rear = 0;
+int front = 0;
 
 int isEmpty()
 {
@@ -14,7 +14,7 @@ int isEmpty()
 
 int isFull()
 {
-	if (rear == max_queue_size - 1)
+	if ((rear + 1) % max_queue_size == front)
 		return 1;
 	else
 		return 0;
@@ -30,7 +30,8 @@ void add(int** queue, int item)
 {
 	if (isFull())
 		queueFull(queue);
-	(*queue)[++rear] = item;
+	rear = (rear + 1) % max_queue_size;
+	(*queue)[rear] = item;
 }
 
 int delete(int** queue)
@@ -38,7 +39,10 @@ int delete(int** queue)
 	if (isEmpty())
 		return -1;
 	else
-		return (*queue)[++front];
+	{
+		front = (front + 1) % max_queue_size;
+		return (*queue)[front];
+	}
 }
 
 int main(void)

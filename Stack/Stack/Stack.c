@@ -1,7 +1,22 @@
 #include <stdio.h>
-#define MAX_STACK_SIZE    10
-int stack[MAX_STACK_SIZE];
+#include <stdlib.h>
+int max_stack_size = 10;
 int top = -1;
+
+int isFull()
+{
+    if (top >= max_stack_size - 1)
+        return 1;
+    else
+        return 0;
+}
+
+int** stackFull(int** stack)
+{
+    max_stack_size *= 2;
+    *stack = realloc(*stack, sizeof(int) * max_stack_size);
+    return stack;
+}
 
 int isEmpty()
 {
@@ -11,39 +26,32 @@ int isEmpty()
         return 0;
 }
 
-int isFull()
+void push(int** stack, int item)
 {
-	if (top >= MAX_STACK_SIZE - 1)
-		return 1;
-	else
-        return 0;
+    if (isFull())
+        stack = stackFull(stack);
+    (*stack)[++top] = item;
 }
 
-void push(int item)
-{
-	if (isFull())
-		return;
-	else
-        stack[++top] = item;
-}
-
-int pop()
+int pop(int** stack)
 {
 	if (isEmpty())
 		return -1;
-	else
-        return stack[top--];
+    else
+        return (*stack)[top--];
 }
 
 int main(void)
 {
-    push(10);
-    push(20);
-    push(30);
-    printf("%d\n", pop());
-    printf("%d\n", pop());
-    push(40);
-    printf("%d\n", pop());
-    printf("%d\n", pop());
+    int* stack = (int*)malloc(sizeof(int) * max_stack_size);
+    push(&stack, 10);
+    push(&stack, 20);
+    push(&stack, 30);
+    printf("%d\n", pop(&stack));
+    printf("%d\n", pop(&stack));
+    push(&stack, 40);
+    printf("%d\n", pop(&stack));
+    printf("%d\n", pop(&stack));
+    free(stack);
 	return 0;
 }
