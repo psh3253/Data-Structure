@@ -1,4 +1,5 @@
 #include <iostream>
+#include <random>
 using namespace std;
 template<typename T>
 
@@ -70,15 +71,23 @@ public:
 
 int main(void)
 {
+    int i;
+    random_device rd;
+    mt19937_64 gen(rd());
+    std::uniform_int_distribution<int> select(0, 1);
+    std::uniform_int_distribution<int> number(1, 1000);
     CircularQueue<int>* q = new CircularQueue<int>(10);
-    q->addQ(10);
-    q->addQ(20);
-    q->addQ(30);
-    cout << q->deleteQ() << endl;
-    cout << q->deleteQ() << endl;
-    q->addQ(40);
-    cout << q->deleteQ() << endl;
-    cout << q->deleteQ() << endl;
+    for (i = 0; i < 1000; i++)
+    {
+        if (select(gen) == 0)
+        {
+            q->addQ(number(gen));
+        }
+        else
+        {
+            cout << q->deleteQ() << endl;
+        }
+    }
     delete[] q;
     return 0;
 }

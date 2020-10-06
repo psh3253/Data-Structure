@@ -1,4 +1,5 @@
 #include <iostream>
+#include <random>
 using namespace std;
 template<typename T>
 
@@ -50,7 +51,7 @@ public:
     void push(T item)
     {
         if (isFull())
-            return;
+            stackFull();
         element[++top] = item;
     }
 
@@ -65,15 +66,23 @@ public:
 
 int main(void)
 {
+    int i;
+    random_device rd;
+    mt19937_64 gen(rd());
+    std::uniform_int_distribution<int> select(0, 1);
+    std::uniform_int_distribution<int> number(1, 1000);
     Stack<int>* s = new Stack<int>(10);
-    s->push(10);
-    s->push(20);
-    s->push(30);
-    cout << s->pop() << endl;
-    cout << s->pop() << endl;
-    s->push(40);
-    cout << s->pop() << endl;
-    cout << s->pop() << endl;
+    for (i = 0; i < 1000; i++)
+    {
+        if (select(gen) == 0)
+        {
+            s->push(number(gen));
+        }
+        else
+        {
+            cout << s->pop() << endl;
+        }
+    }
     delete[] s;
     return 0;
 }
