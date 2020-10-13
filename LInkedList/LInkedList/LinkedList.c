@@ -79,7 +79,7 @@ int delete_front(struct node** A)
 	struct node* ptr = *A;
 	data = ptr->data;
 	*A = ptr->next;
-	free(ptr);
+	//free(*A);
 	return data;
 }
 
@@ -93,7 +93,7 @@ int delete(struct node** A, int data)
 		{
 			temp = ptr->next;
 			ptr->next = ptr->next->next;
-			free(temp);
+			//free(temp);
 			return data;
 		}
 		ptr = ptr->next;
@@ -109,6 +109,7 @@ int main(void)
 	insert_last(&A, 30);
 	insert_last(&A, 40);
 	delete_front(&A);
+	delete(&A, 30);
 	print_list(&A);
 	return 0;
 }
